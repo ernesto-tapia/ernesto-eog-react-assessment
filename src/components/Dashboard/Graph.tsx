@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { getSelectedMetrics, getColors } from '../../Features/SelectedMetrics/selector';
-import { getSeries, getUnits } from '../../Features/Measurements/selector';
+import { getSeries } from '../../Features/Measurements/selector';
 import { useQuery } from 'urql';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, Unit } from '../../Features/Measurements/reducer';
@@ -26,9 +26,9 @@ const timeLimit = thirtyMinutesBefore();
 export default () => {
   const dispatch = useDispatch();
   const selectedMetrics = useSelector(getSelectedMetrics);
-  const series = useSelector(getSeries);
+  const { series, units } = useSelector(getSeries);
   const colors = useSelector(getColors);
-  const units = useSelector(getUnits);
+
   const axes = units.filter((unit: Unit) =>
     unit.metrics.some(name => selectedMetrics.some((metricName: string) => metricName === name)),
   );
@@ -45,7 +45,7 @@ export default () => {
     },
   });
 
-  const { data, error } = result;
+  const { fetching, data, error } = result;
   useEffect(() => {
     if (error) {
       dispatch(actions.measurementsApiErrorReceived({ error: error.message }));
@@ -56,6 +56,7 @@ export default () => {
     dispatch(actions.multipleMeasurementsDataReceived(getMultipleMeasurements));
   }, [data, error, dispatch]);
 
-  if (series.length > 0) return <CustomChart metrics={selectedMetrics} colors={colors} series={series} axes={axes} />;
+  if (series.length > 0 && !fetching)
+    return <CustomChart metrics={selectedMetrics} colors={colors} series={series} axes={axes} />;
   return <div />;
 };
