@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from 'redux-starter-kit';
 
+export type Colors = {
+  [key: string]: string;
+};
+
 type MetricsList = {
   metrics: string[];
 };
 
 type ApiErrorAction = {
   error: string;
-};
-
-type Colors = {
-  [key: string]: string;
 };
 
 const initialState = Object.freeze({

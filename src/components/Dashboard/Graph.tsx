@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
-import { getSelectedMetrics } from '../../Features/SelectedMetrics/selector';
+import { getSelectedMetrics, getColors } from '../../Features/SelectedMetrics/selector';
 import { getSeries } from '../../Features/Measurements/selector';
 import { useQuery } from 'urql';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../Features/Measurements/reducer';
+import CustomChart from './CustomChart';
+
 const query = `
 query($input: [MeasurementQuery]) {
   getMultipleMeasurements(input: $input) {
@@ -25,6 +27,7 @@ export default () => {
   const dispatch = useDispatch();
   const selectedMetrics = useSelector(getSelectedMetrics);
   const series = useSelector(getSeries);
+  const colors = useSelector(getColors);
 
   const input = selectedMetrics.map((metricName: string) => ({
     metricName,
@@ -49,5 +52,6 @@ export default () => {
     dispatch(actions.multipleMeasurementsDataReceived(getMultipleMeasurements));
   }, [data, error, dispatch]);
 
+  if (series.length > 0) return <CustomChart metrics={selectedMetrics} colors={colors} series={series} />;
   return <div />;
 };
