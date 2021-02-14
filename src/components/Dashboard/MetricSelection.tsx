@@ -4,13 +4,16 @@ import { Card, CardContent, Divider, Grid, LinearProgress, makeStyles, Typograph
 import CustomChips from './CustomChips';
 import { actions } from '../../Features/SelectedMetrics/reducer';
 import { useDispatch } from 'react-redux';
+import CustomButtonGroup from './CustomButtonGroup';
 
 const query = `{getMetrics}`;
 
 const texts = Object.freeze({
   HEADER: 'Available metrics:',
-  LOADING: 'Looking for metrics',
 });
+
+const initialState = [] as string[];
+
 const useStyles = makeStyles(() => ({
   root: {
     alignItems: 'center',
@@ -29,7 +32,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default () => {
-  const [metrics, setMetrics] = useState([] as string[]);
+  const [metrics, setMetrics] = useState(initialState);
   const classes = useStyles();
   const dispatch = useDispatch();
   const [result] = useQuery({
@@ -56,8 +59,13 @@ export default () => {
     <div className={classes.container}>
       <Card>
         <Grid container direction="row" spacing={1} className={classes.grid}>
-          <Grid item>
+          <Grid item xs={8}>
             <Typography variant="h4">{texts.HEADER}</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Grid container justify="center" alignItems="center" alignContent="center" className={classes.buttons}>
+              <CustomButtonGroup metrics={metrics} />
+            </Grid>
           </Grid>
         </Grid>
         <Divider />
