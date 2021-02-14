@@ -19,9 +19,9 @@ const initialState = Object.freeze({
 });
 
 function getRandomColor() {
-  const hexUnits = '0123456789ABCDEF';
+  const hexUnits = '0123456789ABCD';
   const hex = '#';
-  const color = [...Array(6)].map(x => hexUnits[Math.floor(Math.random() * 16)]);
+  const color = [...Array(6)].map(x => hexUnits[Math.floor(Math.random() * 14)]);
   return `${hex}${color.join('')}`;
 }
 
