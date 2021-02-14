@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { getSelectedMetrics } from '../../Features/SelectedMetrics/selector';
+import { getSeries } from '../../Features/Measurements/selector';
 import { useQuery } from 'urql';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../Features/Measurements/reducer';
@@ -24,6 +24,7 @@ const timeLimit = thirtyMinutesBefore();
 export default () => {
   const dispatch = useDispatch();
   const selectedMetrics = useSelector(getSelectedMetrics);
+  const series = useSelector(getSeries);
 
   const input = selectedMetrics.map((metricName: string) => ({
     metricName,
