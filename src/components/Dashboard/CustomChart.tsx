@@ -25,7 +25,7 @@ const CustomChart: FunctionComponent<ChartProps> = ({ metrics, colors, series, a
             <Label position="insideTopLeft">{axis.name}</Label>
           </YAxis>
         ))}
-        <Tooltip />
+        <Tooltip isAnimationActive={false} />
         <Legend />
         {metrics.map((metric: string, key: number) => (
           <Line
