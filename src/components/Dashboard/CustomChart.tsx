@@ -34,6 +34,7 @@ const CustomChart: FunctionComponent<ChartProps> = ({ metrics, colors, series, a
             type="monotone"
             activeDot={false}
             dataKey={metric}
+            isAnimationActive={false}
             stroke={colors[metric]}
             dot={false}
           />
