@@ -3,7 +3,7 @@ import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MetricSelection from './MetricSelection';
 import useNewMeasurement from './useNewMeasurement';
-
+import { getNewMeasurement } from '../../Features/Measurements/selector';
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
@@ -19,7 +19,8 @@ const useStyles = makeStyles(theme => ({
 
 export default () => {
   const classes = useStyles();
-  const [newMeasurement, error] = useNewMeasurement();
+  useNewMeasurement();
+
   return (
     <div className={classes.root}>
       <Paper elevation={1}>

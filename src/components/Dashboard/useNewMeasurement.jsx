@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSubscription } from 'urql';
+import { actions } from '../../Features/Measurements/reducer';
 
 const newMeasure = `
 subscription {
@@ -10,19 +11,17 @@ subscription {
 
 const useNewMeasurement = () => {
   const dispatch = useDispatch();
-  const [newMeasurement, setLastMeasurement] = useState([]);
   const [subscriptionResponse] = useSubscription({ query: newMeasure });
   const { data: subscriptionData, error } = subscriptionResponse;
 
   useEffect(() => {
     if (error) {
-      console.log(error);
+      dispatch(actions.measurementsApiErrorReceived(error));
     }
     if (!subscriptionData) return;
-    console.log(subscriptionData);
-    setLastMeasurement(subscriptionData);
+    const { newMeasurement } = subscriptionData;
+    dispatch(actions.singleMeasurementDataReceived(newMeasurement));
   }, [subscriptionData, error, dispatch]);
-  return [newMeasurement, error];
 };
 
 export default useNewMeasurement;
