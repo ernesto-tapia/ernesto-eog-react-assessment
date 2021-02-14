@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Provider, createClient, useQuery } from 'urql';
-import { Card, CardContent, Chip, Divider, Grid, LinearProgress, makeStyles, Typography } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-
-const client = createClient({
-  url: 'https://react.eogresources.com/graphql',
-});
+import { useQuery } from 'urql';
+import { Card, CardContent, Divider, Grid, LinearProgress, makeStyles, Typography } from '@material-ui/core';
+import CustomChips from './CustomChips';
 
 const query = `{getMetrics}`;
-
-const initialSelectionsState: string[] = [];
 
 const texts = Object.freeze({
   HEADER: 'Available metrics:',
@@ -33,23 +27,15 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default () => {
-  return (
-    <Provider value={client}>
-      <Metrics />
-    </Provider>
-  );
-};
-
-const Metrics = () => {
-  const [metrics, setMetrics] = useState([]);
+export default (props: { setSelections: any; selectedMetrics: any }) => {
+  const { setSelections, selectedMetrics } = props;
+  const [metrics, setMetrics] = useState([] as string[]);
   const classes = useStyles();
   const [result] = useQuery({
     query,
     variables: {},
   });
   const { fetching, data, error } = result;
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!data) return;
@@ -78,13 +64,7 @@ const Metrics = () => {
             spacing={1}
             className={classes.grid}
           >
-            {metrics.map((metricName: string, index: number) => (
-              <Grid item xs={2} key={index}>
-                <Grid container justify="center">
-                  <Chip color="primary" key={index} label={metricName} />
-                </Grid>
-              </Grid>
-            ))}
+            <CustomChips metrics={metrics} setSelections={setSelections} selectedMetrics={selectedMetrics} />
           </Grid>
         </CardContent>
       </Card>
