@@ -13,6 +13,11 @@ export type Data = {
   at: Date;
 };
 
+export type Unit = {
+  name: string;
+  metrics: string[];
+};
+
 type ApiErrorAction = {
   error: string;
 };
@@ -26,6 +31,7 @@ const initialState = Object.freeze({
   newMeasure: {},
   series: [] as Data[],
   error: {},
+  units: [] as Unit[],
 });
 
 const slice = createSlice({
@@ -42,23 +48,31 @@ const slice = createSlice({
       if (!action.payload) return;
       const measurementsData = action.payload;
       const currentSeries = [...state.series];
+      const units = [...state.units];
       const newMeasures = measurementsData.filter((measures: MultipleMeasurementsAction) => {
         const { metric } = measures;
         return !currentSeries.some(serie => serie.hasOwnProperty(metric));
       });
+
       newMeasures.forEach(measure => {
         const { measurements: newMeasurements } = measure;
+        const { metric, unit } = newMeasurements[0];
+        const pointer = units.findIndex(oldUnit => oldUnit.name === unit);
+        console.log(pointer >= 0);
+        pointer >= 0
+          ? !units[pointer].metrics.some(name => metric === name) && units[pointer].metrics.push(metric)
+          : units.push({ name: unit, metrics: [metric] });
+
         newMeasurements.forEach(x => {
           const { at, metric, value } = x;
           const index = currentSeries.findIndex(time => time.at === at);
-
           index >= 0
             ? (currentSeries[index] = { ...currentSeries[index], [metric]: value })
             : currentSeries.push({ name: new Date(at).toLocaleTimeString(), [metric]: value, at });
         });
       });
-      state = { ...state, series: currentSeries };
-      return state;
+      state.series = currentSeries;
+      state.units = [...units];
     },
 
     measurementsApiErrorReceived: (state, action: PayloadAction<ApiErrorAction>) => {

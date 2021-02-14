@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { getSelectedMetrics, getColors } from '../../Features/SelectedMetrics/selector';
-import { getSeries } from '../../Features/Measurements/selector';
+import { getSeries, getUnits } from '../../Features/Measurements/selector';
 import { useQuery } from 'urql';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions } from '../../Features/Measurements/reducer';
+import { actions, Unit } from '../../Features/Measurements/reducer';
 import CustomChart from './CustomChart';
 
 const query = `
@@ -28,6 +28,10 @@ export default () => {
   const selectedMetrics = useSelector(getSelectedMetrics);
   const series = useSelector(getSeries);
   const colors = useSelector(getColors);
+  const units = useSelector(getUnits);
+  const axes = units.filter((unit: Unit) =>
+    unit.metrics.some(name => selectedMetrics.some((metricName: string) => metricName === name)),
+  );
 
   const input = selectedMetrics.map((metricName: string) => ({
     metricName,
@@ -52,6 +56,6 @@ export default () => {
     dispatch(actions.multipleMeasurementsDataReceived(getMultipleMeasurements));
   }, [data, error, dispatch]);
 
-  if (series.length > 0) return <CustomChart metrics={selectedMetrics} colors={colors} series={series} />;
+  if (series.length > 0) return <CustomChart metrics={selectedMetrics} colors={colors} series={series} axes={axes} />;
   return <div />;
 };
