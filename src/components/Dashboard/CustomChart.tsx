@@ -13,7 +13,6 @@ type ChartProps = {
 const CustomChart: FunctionComponent<ChartProps> = ({ metrics, colors, series, axes }) => {
   function findAxisId(metric: string) {
     const foundMetric = axes.find(item => item.metrics.some(name => name === metric));
-    console.log(foundMetric);
     return foundMetric ? foundMetric.name : '';
   }
 

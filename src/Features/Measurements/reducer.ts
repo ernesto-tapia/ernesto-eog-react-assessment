@@ -58,7 +58,6 @@ const slice = createSlice({
         const { measurements: newMeasurements } = measure;
         const { metric, unit } = newMeasurements[0];
         const pointer = units.findIndex(oldUnit => oldUnit.name === unit);
-        console.log(pointer >= 0);
         pointer >= 0
           ? !units[pointer].metrics.some(name => metric === name) && units[pointer].metrics.push(metric)
           : units.push({ name: unit, metrics: [metric] });
