@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, makeStyles } from '@material-ui/core';
-import { getSelectedMetrics } from '../../Features/SelectedMetrics/selector';
+import { getSelectedMetrics, getColors } from '../../Features/SelectedMetrics/selector';
 import { useSelector } from 'react-redux';
 import MetricCard from './MetricCard';
 const useStyles = makeStyles(theme => ({
@@ -19,6 +19,7 @@ const useStyles = makeStyles(theme => ({
 export default () => {
   const classes = useStyles();
   const selectedMetrics = useSelector(getSelectedMetrics);
+  const colors = useSelector(getColors);
 
   if (selectedMetrics.length === 0) return <div />;
   return (
@@ -26,8 +27,8 @@ export default () => {
       <Grid container spacing={1}>
         <Grid container item spacing={1} xs={12}>
           {selectedMetrics.map((metric: string) => (
-            <Grid item xs={3} key={metric}>
-              <MetricCard key={metric} metric={metric} />
+            <Grid item xs={2} key={metric}>
+              <MetricCard key={metric} metric={metric} color={colors[metric]} />
             </Grid>
           ))}
         </Grid>
