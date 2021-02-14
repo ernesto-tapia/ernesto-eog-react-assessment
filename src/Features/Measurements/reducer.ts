@@ -23,11 +23,12 @@ const slice = createSlice({
     singleMeasurementDataReceived: (state, action: PayloadAction<Measurement>) => {
       if (!action.payload) return;
       const newMeasure = action.payload;
-      console.log('hey', newMeasure);
       state = { ...state, newMeasure };
       return state;
     },
-    measurementsApiErrorReceived: (state, action: PayloadAction<ApiErrorAction>) => state,
+    measurementsApiErrorReceived: (state, action: PayloadAction<ApiErrorAction>) => {
+      return state;
+    },
   },
 });
 
