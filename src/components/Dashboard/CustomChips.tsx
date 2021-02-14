@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Grid, Chip, makeStyles } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
+import { getSelectedMetrics } from '../../Features/SelectedMetrics/selector';
+import { actions } from '../../Features/SelectedMetrics/reducer';
 
 const useStyles = makeStyles(() => ({
   grid: {
@@ -9,9 +12,15 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default (props: { metrics: string[]; setSelections: any; selectedMetrics: any }) => {
+export default (props: { metrics: string[] }) => {
   const classes = useStyles();
-  const { metrics, setSelections, selectedMetrics } = props;
+  const { metrics } = props;
+  const dispatch = useDispatch();
+  const selectedMetrics = useSelector(getSelectedMetrics);
+  const setSelections = useCallback(
+    (metrics: string[]) => dispatch({ type: actions.selectedMetricsReceived, payload: metrics }),
+    [dispatch],
+  );
 
   const addMetric = (name: string) => {
     switch (selectedMetrics.length) {

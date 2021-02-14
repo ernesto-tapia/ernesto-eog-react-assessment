@@ -1,12 +1,9 @@
-import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import MetricSelection from './MetricsUI';
-import { useSelector } from 'react-redux';
-import { getSelectedMetrics } from '../../Features/SelectedMetrics/selector';
 import useNewMeasurement from './useNewMeasurement';
-import { actions } from '../../Features/SelectedMetrics/reducer';
+import MetricSelection from './MetricSelection';
+import MetricsUI from './MetricsUI';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,17 +21,12 @@ const useStyles = makeStyles(theme => ({
 export default () => {
   const classes = useStyles();
   useNewMeasurement();
-  const dispatch = useDispatch();
-  const selectedMetrics = useSelector(getSelectedMetrics);
-  const setSelections = useCallback(
-    (metrics: string[]) => dispatch({ type: actions.selectedMetricsReceived, payload: metrics }),
-    [dispatch],
-  );
 
   return (
     <div className={classes.root}>
+      <MetricSelection />
       <Paper elevation={1}>
-        <MetricSelection setSelections={setSelections} selectedMetrics={selectedMetrics} />
+        <MetricsUI />
       </Paper>
     </div>
   );

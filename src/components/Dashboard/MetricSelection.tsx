@@ -27,8 +27,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default (props: { setSelections: any; selectedMetrics: any }) => {
-  const { setSelections, selectedMetrics } = props;
+export default () => {
   const [metrics, setMetrics] = useState([] as string[]);
   const classes = useStyles();
   const [result] = useQuery({
@@ -44,13 +43,13 @@ export default (props: { setSelections: any; selectedMetrics: any }) => {
   }, [data]);
 
   if (fetching) return <LinearProgress />;
-  if (error) return <Typography variant="h2">{error.message}</Typography>;
+  if (error) return <Typography variant="h4">{error.message}</Typography>;
   return (
     <div className={classes.container}>
       <Card>
         <Grid container direction="row" spacing={1} className={classes.grid}>
           <Grid item>
-            <Typography variant="h3">{texts.HEADER}</Typography>
+            <Typography variant="h4">{texts.HEADER}</Typography>
           </Grid>
         </Grid>
         <Divider />
@@ -64,7 +63,7 @@ export default (props: { setSelections: any; selectedMetrics: any }) => {
             spacing={1}
             className={classes.grid}
           >
-            <CustomChips metrics={metrics} setSelections={setSelections} selectedMetrics={selectedMetrics} />
+            <CustomChips metrics={metrics} />
           </Grid>
         </CardContent>
       </Card>
