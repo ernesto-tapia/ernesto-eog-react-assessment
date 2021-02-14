@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useQuery } from 'urql';
 import { Card, CardContent, Divider, Grid, LinearProgress, makeStyles, Typography } from '@material-ui/core';
 import CustomChips from './CustomChips';
+import { actions } from '../../Features/SelectedMetrics/reducer';
+import { useDispatch } from 'react-redux';
 
 const query = `{getMetrics}`;
 
@@ -14,7 +16,6 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
   },
   grid: {
-    paddingTop: '1%',
     margin: '1%',
     width: '100%',
   },
@@ -30,17 +31,24 @@ const useStyles = makeStyles(() => ({
 export default () => {
   const [metrics, setMetrics] = useState([] as string[]);
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [result] = useQuery({
     query,
     variables: {},
   });
   const { fetching, data, error } = result;
 
+  const setMetricColors = useCallback(
+    (metrics: string[]) => dispatch({ type: actions.colorsDataReceived, payload: { metrics } }),
+    [dispatch],
+  );
+
   useEffect(() => {
     if (!data) return;
     const { getMetrics } = data;
     setMetrics(getMetrics);
-  }, [data]);
+    setMetricColors(getMetrics);
+  }, [data, setMetricColors]);
 
   if (fetching) return <LinearProgress />;
   if (error) return <Typography variant="h4">{error.message}</Typography>;
