@@ -3,6 +3,7 @@ import { Grid, makeStyles } from '@material-ui/core';
 import { getSelectedMetrics, getColors } from '../../Features/SelectedMetrics/selector';
 import { useSelector } from 'react-redux';
 import MetricCard from './MetricCard';
+import Graph from './Graph';
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
@@ -33,6 +34,7 @@ export default () => {
           ))}
         </Grid>
       </Grid>
+      <Graph />
     </div>
   );
 };
